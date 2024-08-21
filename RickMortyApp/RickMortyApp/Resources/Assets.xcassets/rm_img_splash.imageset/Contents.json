@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "rm_img_splash.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
