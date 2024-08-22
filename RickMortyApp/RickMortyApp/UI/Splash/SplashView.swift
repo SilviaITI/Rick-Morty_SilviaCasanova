@@ -18,7 +18,7 @@ struct SplashView: View {
     @State private var viewState: ViewState = .splash
     
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             switch viewState {
             case .splash:
                 splashContent

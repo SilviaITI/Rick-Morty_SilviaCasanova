@@ -26,7 +26,7 @@ extension NetworkInterface {
         switch self {
         case .getAllCharacters,
                 .getCharacterByName:
-            return "/character"
+            return "/api/character"
         }
     }
     
@@ -80,7 +80,7 @@ extension NetworkInterface {
 
 extension URLRequest {
     static func request(networkRequest: NetworkInterface) -> URLRequest {
-        var components = URLComponents(string: "https://rickandmortyapi.com/api")
+        var components = URLComponents(string: "https://rickandmortyapi.com")
         components?.path = networkRequest.path
         
         if let query = networkRequest.query {

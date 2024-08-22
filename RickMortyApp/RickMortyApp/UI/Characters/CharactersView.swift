@@ -9,34 +9,63 @@ import SwiftUI
 
 struct CharactersView: View {
     
+    @State var searcheText = "Nombre del personaje..."
+    @FocusState var isFocused
+    @StateObject var viewModel = CharactersViewModel()
+    @State var scrollToTop = false
+    @State var showButton = false
+    
     var body: some View {
-      
-                HStack(spacing: 20) {
-                    Image(.rickTest)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 80, height: 80)
-                        .clipShape(Circle())
-                    VStack(alignment: .leading) {
-                        Text("Ricky García")
-                            .setStyle(font: .bold, size: 20)
-                            Text("Human")
-                                .setStyle(font: .regular, size: 18)
-                    }
-                    
-                    Spacer()
-                    Image(.imgAlive)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
+        ZStack{
+          
+            VStack {
+                CustomSearchBar(searchText: $searcheText, focusedField: _isFocused) {
                 }
-        
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(height: 120)
-                .padding(.horizontal)
-                .shadowContainer(radius: 12, backGroundColor: .blueMain, borderColor: .greenSecondary)
+              
+                ScrollViewReader { reader in
+                    ScrollView {
+                            LazyVStack(spacing: 20
+                            ) {
+                                ForEach(viewModel.characterList.indices, id: \.self) { index in
+                                    CharacterCell(viewModel.characterList[index])
+                                        .onAppear {
+                                            viewModel.handlePage(index: index)
+                                        }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    .onChange(of: scrollToTop) { _ in
+                        withAnimation {
+                            reader.scrollTo(0, anchor: .top)
+                            scrollToTop = false
+                        }
+                    }
+                }
+            }
+            Button {
+                    scrollToTop = true
+                
+            } label: {
+                
+               Image(systemName: "arrow.up")
+                    .resizable()
+                    .frame(width: 44, height: 44)
+                    .foregroundStyle(.greenSecondary)
+                    .padding(8)
+                    .background(Color.white)
+                    .clipShape(Circle())
+                   
+                    
+                
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+            .padding(24)
+
+        }
     }
 }
+
 
 
 #Preview {
