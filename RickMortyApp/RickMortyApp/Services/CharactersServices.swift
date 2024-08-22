@@ -12,4 +12,8 @@ struct CharactersServices {
         try await NetworkInterface.getAllCharacters(page: page).response()
         
     }
+    
+    static func fetchCharactersByName(page: Int, name: String) async throws -> ApiResponse {
+        try await NetworkInterface.getCharacterByName(page: page, name: name).response()
+    }
 }

@@ -9,19 +9,42 @@ import SwiftUI
 
 struct CharactersView: View {
     
-    @State var searcheText = "Nombre del personaje..."
+
     @FocusState var isFocused
     @StateObject var viewModel = CharactersViewModel()
     @State var scrollToTop = false
     @State var showButton = false
+    @State var isFiltered = false
     
     var body: some View {
         ZStack {
           
             VStack {
-                CustomSearchBar(searchText: $searcheText, focusedField: _isFocused) {
-                } 
-              
+                CustomSearchBar(searchText: $viewModel.searchText, focusedField: _isFocused) {
+                    viewModel.filterCharacters()
+                }
+                if viewModel.isFiltered {
+                    Button {
+                        viewModel.clearFilters()
+                    } label: {
+                        Label(
+                            title: { Text("Limpiar filtros")
+                                
+                                    .setStyle(font: .regular, size: 16, color: .black)
+                                   
+                            },
+                            icon: { Image(systemName: "xmark.square.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundColor(.red.opacity(0.6))
+                                .frame(width: 40, height: 40)    
+                            }
+                        )
+                        .padding(6)
+                        .shadowContainer(borderColor: .red.opacity(0.6))
+                        
+                    }
+                }
                 ScrollViewReader { reader in
                     ScrollView {
                             LazyVStack(spacing: 16

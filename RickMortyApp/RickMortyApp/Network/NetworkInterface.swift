@@ -18,7 +18,7 @@ enum HTTPMethod: String {
 
 enum NetworkInterface {
     case getAllCharacters(page: Int)
-    case getCharacterByName(name: String)
+    case getCharacterByName(page: Int, name: String)
 }
 
 extension NetworkInterface {
@@ -42,8 +42,8 @@ extension NetworkInterface {
         switch self {
         case .getAllCharacters(let page):
             return [URLQueryItem(name: "page", value: String(page))]
-        case .getCharacterByName(let name):
-            return [URLQueryItem(name: "name", value: name)]
+        case .getCharacterByName(let page, let name):
+            return [URLQueryItem(name: "page", value: String(page)),URLQueryItem(name: "name", value: name)]
         default:
             return nil
         }
