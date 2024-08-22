@@ -13,7 +13,7 @@ struct CharactersServices {
         
     }
     
-    static func fetchCharactersByName(page: Int, name: String) async throws -> ApiResponse {
-        try await NetworkInterface.getCharacterByName(page: page, name: name).response()
+    static func fetchCharactersByName(page: Int, name: String, status: String) async throws -> ApiResponse {
+        try await NetworkInterface.getCharactersFiltered(page: page, name: name, status: status).response()
     }
 }

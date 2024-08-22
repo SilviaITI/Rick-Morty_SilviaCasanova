@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+
 final class CharactersViewModel: ObservableObject {
     
     @Published var filteredList: [Character] = []
@@ -13,7 +15,20 @@ final class CharactersViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var isFiltered = false
     @Published var originalList: [Character] = []
-  
+    @Published var selectedOption: Int = 0
+    
+     var selectedStatus: String {
+        switch selectedOption {
+        case 0:
+            return StatusState.alive.rawValue
+        case 1:
+            return StatusState.dead.rawValue
+        case 2:
+            return StatusState.unknown.rawValue
+        default:
+            return StatusState.unknown.rawValue
+        }
+    }
     
     var isPaginable = true
     var listError = false
@@ -31,7 +46,7 @@ final class CharactersViewModel: ObservableObject {
                 if  !isFiltered {
                     await self?.fetchCharacters()
                 } else {
-                    await self?.fetchCharactersByName()
+                    await self?.fetchCharactersFiltered()
                 }
             }
         }
@@ -39,7 +54,7 @@ final class CharactersViewModel: ObservableObject {
     
     func filterCharacters() {
         Task { [weak self] in
-            await self?.fetchCharactersByName()
+            await self?.fetchCharactersFiltered()
         }
     }
     
@@ -50,6 +65,7 @@ final class CharactersViewModel: ObservableObject {
         isFiltered = false
     }
     
+  
     @MainActor
     func fetchCharacters() async {
         guard isPaginable  else { return }
@@ -67,9 +83,12 @@ final class CharactersViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchCharactersByName() async {
+    func fetchCharactersFiltered() async {
         do {
-            let response = try await CharactersServices.fetchCharactersByName(page: currentFilteredPage, name: searchText)
+            let response = try await CharactersServices.fetchCharactersByName(
+                page: currentFilteredPage,
+                name: searchText,
+                status: selectedStatus )
             filteredList.append(contentsOf: response.results ?? [])
             characterList = filteredList
             currentFilteredPage += 1

@@ -23,6 +23,9 @@ struct CharactersView: View {
                 CustomSearchBar(searchText: $viewModel.searchText, focusedField: _isFocused) {
                     viewModel.filterCharacters()
                 }
+                StatusSelector {
+                    
+                }
                 if viewModel.isFiltered {
                     Button {
                         viewModel.clearFilters()

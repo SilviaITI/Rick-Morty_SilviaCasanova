@@ -30,6 +30,7 @@
 		619480CB2C7780CE00F28D2D /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619480CA2C7780CE00F28D2D /* CustomSearchBar.swift */; };
 		619480CD2C77845000F28D2D /* CharactersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619480CC2C77845000F28D2D /* CharactersViewModel.swift */; };
 		619480CF2C7785E200F28D2D /* CharactersServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619480CE2C7785E200F28D2D /* CharactersServices.swift */; };
+		61B1CB942C77D4B000BECC56 /* StatusSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B1CB932C77D4B000BECC56 /* StatusSelector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		619480CA2C7780CE00F28D2D /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		619480CC2C77845000F28D2D /* CharactersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersViewModel.swift; sourceTree = "<group>"; };
 		619480CE2C7785E200F28D2D /* CharactersServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersServices.swift; sourceTree = "<group>"; };
+		61B1CB932C77D4B000BECC56 /* StatusSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusSelector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 			children = (
 				619480C02C7758D100F28D2D /* CharacterCell */,
 				619480CA2C7780CE00F28D2D /* CustomSearchBar.swift */,
+				61B1CB932C77D4B000BECC56 /* StatusSelector.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				618973272C76382E00E74B6F /* DetailCharacter.swift in Sources */,
 				618973322C7656C800E74B6F /* ShadowContainer.swift in Sources */,
 				619480C22C77590D00F28D2D /* CharacterCell.swift in Sources */,
+				61B1CB942C77D4B000BECC56 /* StatusSelector.swift in Sources */,
 				6189731E2C76351C00E74B6F /* ApiResponse.swift in Sources */,
 				619480CB2C7780CE00F28D2D /* CustomSearchBar.swift in Sources */,
 				6189731A2C76330E00E74B6F /* String+Extension.swift in Sources */,

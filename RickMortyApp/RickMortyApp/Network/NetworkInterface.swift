@@ -18,14 +18,14 @@ enum HTTPMethod: String {
 
 enum NetworkInterface {
     case getAllCharacters(page: Int)
-    case getCharacterByName(page: Int, name: String)
+    case getCharactersFiltered(page: Int?, name: String?, status: String?)
 }
 
 extension NetworkInterface {
     var path: String {
         switch self {
         case .getAllCharacters,
-                .getCharacterByName:
+                .getCharactersFiltered:
             return "/api/character"
         }
     }
@@ -33,7 +33,7 @@ extension NetworkInterface {
     var method: HTTPMethod {
         switch self {
         case .getAllCharacters,
-                .getCharacterByName:
+                .getCharactersFiltered:
             return .get
         }
     }
@@ -41,11 +41,19 @@ extension NetworkInterface {
     var query: [URLQueryItem]? {
         switch self {
         case .getAllCharacters(let page):
-            return [URLQueryItem(name: "page", value: String(page))]
-        case .getCharacterByName(let page, let name):
-            return [URLQueryItem(name: "page", value: String(page)),URLQueryItem(name: "name", value: name)]
-        default:
-            return nil
+            return queryItem(["page": String(page)])
+        case .getCharactersFiltered(let page, let name, let status):
+            var params: [String:String] = [:]
+            if let page {
+                params["page"] = String(page)
+             }
+            if let name {
+                params["name"] = name
+            }
+            if let status {
+                params["status"] = status
+            }
+            return queryItem(params)
         }
     }
     
@@ -122,6 +130,15 @@ private func encodeParams(_ params: [String: String]) -> Data? {
         return try JSONEncoder().encode(params)
     } catch {
         return nil
+    }
+}
+
+/// Método para crear los QueryItems
+/// - Parameter params: Diccionario con la clave y el valor de la query
+/// - Returns: devolverá el array de query items
+private func queryItem(_ params: [String: String]) -> [URLQueryItem] {
+    return params.map { key, value in
+        URLQueryItem(name: key, value: value)
     }
 }
 
