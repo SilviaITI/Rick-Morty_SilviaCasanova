@@ -11,7 +11,6 @@ struct CustomSearchBar: View {
     
     @Binding var searchText: String
     @FocusState var focusedField: Bool
-    
     let action: () -> ()
     var body: some View {
       
@@ -19,6 +18,7 @@ struct CustomSearchBar: View {
             TextField("Nombre del personaje...", text: $searchText)
                 .textFieldStyle(CustomRounderedTextFieldStyle())
                 .focused($focusedField)
+        
             Button {
                 action()
             } label: {

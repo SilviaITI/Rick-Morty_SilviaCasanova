@@ -15,14 +15,24 @@ struct CharacterCell: View {
     }
     var body: some View {
         HStack(spacing: 20) {
-            Image(.rickTest)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 80, height: 80)
-                .clipShape(Circle())
+            AsyncImage(url: data.image) { image in
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+            } placeholder: {
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+            }
+            
             VStack(alignment: .leading) {
                 Text(data.name ?? "_")
                     .setStyle(font: .bold, size: 20)
+                    .multilineTextAlignment(.leading)
                 Text(data.species ?? "_")
                         .setStyle(font: .regular, size: 18)
             }

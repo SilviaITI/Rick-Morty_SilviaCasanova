@@ -188,6 +188,7 @@
 		618973122C762D3600E74B6F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				619480C02C7758D100F28D2D /* CharacterCell */,
 				619480CA2C7780CE00F28D2D /* CustomSearchBar.swift */,
 			);
 			path = Components;
@@ -196,7 +197,6 @@
 		618973232C7637EE00E74B6F /* Characters */ = {
 			isa = PBXGroup;
 			children = (
-				619480C02C7758D100F28D2D /* CharacterCell */,
 				618973282C76383E00E74B6F /* CharactersView.swift */,
 				619480CC2C77845000F28D2D /* CharactersViewModel.swift */,
 			);

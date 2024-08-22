@@ -16,21 +16,25 @@ struct CharactersView: View {
     @State var showButton = false
     
     var body: some View {
-        ZStack{
+        ZStack {
           
             VStack {
                 CustomSearchBar(searchText: $searcheText, focusedField: _isFocused) {
-                }
+                } 
               
                 ScrollViewReader { reader in
                     ScrollView {
-                            LazyVStack(spacing: 20
+                            LazyVStack(spacing: 16
                             ) {
                                 ForEach(viewModel.characterList.indices, id: \.self) { index in
-                                    CharacterCell(viewModel.characterList[index])
-                                        .onAppear {
-                                            viewModel.handlePage(index: index)
-                                        }
+                                    NavigationLink {
+                                        DetailCharacter(data: viewModel.characterList[index])
+                                    } label: {
+                                        CharacterCell(viewModel.characterList[index])
+                                            .onAppear {
+                                                viewModel.handlePage(index: index)
+                                            }
+                                    }
                                 }
                             }
                             .padding(.horizontal)

@@ -23,7 +23,7 @@ struct SplashView: View {
             case .splash:
                 splashContent
             case .characters:
-                EmptyView()
+                CharactersView()
             }
         }
     }
@@ -48,7 +48,7 @@ extension SplashView {
             isAnimating = true
         }
         Timer.scheduledTimer(withTimeInterval: 4, repeats: false) { _ in
-          
+            viewState = .characters
         }
     }
 }

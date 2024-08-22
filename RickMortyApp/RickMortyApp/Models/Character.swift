@@ -17,9 +17,9 @@ struct Character: Codable {
     let gender: String?
     let origin: Origin?
     let location: Location?
-    let image: String?
+    let image: URL?
     let episode: [String]?
-    let url: String?
+    
     
     var statusImage: StatusState {
         StatusState(rawValue: status ?? "") ?? .unknown
@@ -70,7 +70,7 @@ enum GenderState: String {
 }
 
 extension Character {
-    static let charTest = Character(id: 1, name: "Rick Sanchez", status: "Alive", species: "Human", type: "Person who travel the world", gender: "Male", origin: originTest, location: locationTest, image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg", episode: ["Episodeurltest"], url: "https://rickandmortyapi.com/api/character")
+    static let charTest = Character(id: 1, name: "Rick Sanchez", status: "Alive", species: "Human", type: "Person who travel the world", gender: "Male", origin: originTest, location: locationTest, image: URL(string :"https://rickandmortyapi.com/api/character/avatar/1.jpeg"), episode: ["Episodeurltest"])
     
     static let originTest = Origin(name: "Earth", url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9DGm9paGxvLOOcxjka6dWwZ-ViZ4aq8Hi_g&s")
     
