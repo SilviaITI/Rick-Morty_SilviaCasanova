@@ -61,6 +61,8 @@ final class CharactersViewModel: ObservableObject {
             self?.filteredList.removeAll(keepingCapacity: true)
             self?.scrollToTop = true
             await self?.fetchCharactersFiltered()
+            self?.currentFilteredPage = 0
+            self?.currentPage = 0
         }
     }
     
