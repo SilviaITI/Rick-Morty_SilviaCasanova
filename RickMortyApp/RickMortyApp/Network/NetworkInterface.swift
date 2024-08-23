@@ -5,7 +5,7 @@
 //  Created by Silvia Casanova Martinez on 21/8/24.
 //
 
-import Foundation
+import SwiftUI
 
 struct EmptyResponse: Codable {}
 
@@ -17,8 +17,98 @@ enum HTTPMethod: String {
 }
 
 enum NetworkInterface {
-    case getAllCharacters
-    case getSingleCharacter(id: Int)
-
+    case getAllCharacters(page: Int)
+    case getCharactersFiltered(page: Int?, name: String?, status: String?)
+    case getEpisodeById(id: Int)
 }
+
+extension NetworkInterface {
+    var path: String {
+        switch self {
+        case .getAllCharacters,
+                .getCharactersFiltered:
+            return "/api/character"
+        case .getEpisodeById(let id):
+            return "/api/episode/\(id)"
+        }
+    }
+    
+    var method: HTTPMethod {
+        switch self {
+        case .getAllCharacters,
+                .getCharactersFiltered,
+                .getEpisodeById:
+            return .get
+        }
+    }
+    
+    var query: [URLQueryItem]? {
+        switch self {
+        case .getAllCharacters(let page):
+            return queryItem(["page": String(page)])
+        case .getCharactersFiltered(let page, let name, let status):
+            var params: [String:String] = [:]
+            if let page {
+                params["page"] = String(page)
+             }
+            if let name {
+                params["name"] = name
+            }
+            if let status {
+                params["status"] = status
+            }
+            return queryItem(params)
+            
+        default: return nil
+        }
+    }
+    
+    var body: Data? {
+        switch self {
+        default: return nil
+        }
+    }
+    
+    var headers: [String: String]? {
+        var header = NetworkInterface.defaultHeaders
+        if let body {
+            header["Content-Length"] = "\(body.count)"
+        }
+        return header
+    }
+    
+    private static var defaultHeaders: [String: String] {
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        let device = UIDevice.current
+        return [
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "appVersion": appVersion ?? "",
+            "brand": device.name,
+            "model": device.model,
+            "os": device.systemName,
+            "osVersion": device.systemVersion
+        ]
+    }
+}
+
+
+
+private func encodeParams(_ params: [String: String]) -> Data? {
+    do {
+        return try JSONEncoder().encode(params)
+    } catch {
+        return nil
+    }
+}
+
+/// Método para crear los QueryItems
+/// - Parameter params: Diccionario con la clave y el valor de la query
+/// - Returns: devolverá el array de query items
+private func queryItem(_ params: [String: String]) -> [URLQueryItem] {
+    return params.map { key, value in
+        URLQueryItem(name: key, value: value)
+    }
+}
+
 
