@@ -24,6 +24,7 @@ final class CharactersViewModel: ObservableObject {
     @Published var scrollToTop = false
     
     var isPaginable = true
+    var isPaginableFilter = true
     var currentPage = 0
     var currentFilteredPage = 0
     var enableSearchButton: Bool {
@@ -59,10 +60,11 @@ final class CharactersViewModel: ObservableObject {
     func filterCharacters() {
         Task { [weak self] in
             self?.filteredList.removeAll(keepingCapacity: true)
-            self?.scrollToTop = true
-            await self?.fetchCharactersFiltered()
             self?.currentFilteredPage = 0
-            self?.currentPage = 0
+            self?.scrollToTop = true
+            self?.isPaginableFilter = true
+            await self?.fetchCharactersFiltered()
+          
         }
     }
     
@@ -74,6 +76,8 @@ final class CharactersViewModel: ObservableObject {
         isFiltered = false
         status = .none
         scrollToTop = true
+        self.currentFilteredPage = 0
+        isPaginableFilter = true
     }
     
     // MARK: - API Methods -
@@ -101,12 +105,14 @@ final class CharactersViewModel: ObservableObject {
  
     /// Método para traer el listado de los personajes filtrado opcionalmente por nombre y estado y comprueba si existe una página siguiente para mostrarla.
     func fetchCharactersFiltered() async {
+        guard isPaginableFilter  else { return }
         isLoading = true
         do {
             let response = try await CharactersServices.fetchCharactersByName(
                 page: currentFilteredPage,
                 name: searchText,
                 status: status.rawValue)
+            isPaginableFilter = response.info?.next != nil
             filteredList.append(contentsOf: response.results ?? [])
             characterList = filteredList
             currentFilteredPage += 1
