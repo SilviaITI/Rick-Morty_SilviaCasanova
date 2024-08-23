@@ -9,8 +9,10 @@ import SwiftUI
 
 struct DetailCharacter: View {
     
+    // MARK: - Properties -
     let data: Character
     
+    // MARK: - Principal View -
     var body: some View {
         
         ZStack {

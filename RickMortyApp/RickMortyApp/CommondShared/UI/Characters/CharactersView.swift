@@ -9,22 +9,20 @@ import SwiftUI
 
 struct CharactersView: View {
     
-
+    // MARK: - Properties -
     @FocusState var isFocused
     @StateObject var viewModel = CharactersViewModel()
     @State var scrollToTop = false
     @State var showButton = false
     @State var isFiltered = false
     
+    // MARK: - Principal View -
     var body: some View {
         ZStack {
           
             VStack {
                 CustomSearchBar(searchText: $viewModel.searchText, focusedField: _isFocused) {
                     viewModel.filterCharacters()
-                }
-                StatusSelector {
-                    
                 }
                 if viewModel.isFiltered {
                     Button {

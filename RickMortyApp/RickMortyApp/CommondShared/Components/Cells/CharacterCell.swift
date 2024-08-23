@@ -9,11 +9,17 @@ import SwiftUI
 
 struct CharacterCell: View {
     
+    // MARK: - Properties -
     let data: Character
+    
+    // MARK: - Init -
     init(_ data: Character) {
         self.data = data
     }
+    
+    // MARK: - Principal View -
     var body: some View {
+        
         HStack(spacing: 20) {
             AsyncImage(url: data.image) { image in
                 image

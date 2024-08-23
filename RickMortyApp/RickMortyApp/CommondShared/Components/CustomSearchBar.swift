@@ -9,9 +9,12 @@ import SwiftUI
 
 struct CustomSearchBar: View {
     
+    // MARK: - Properties -
     @Binding var searchText: String
     @FocusState var focusedField: Bool
     let action: () -> ()
+    
+    // MARK: - Principal View -
     var body: some View {
       
         HStack {

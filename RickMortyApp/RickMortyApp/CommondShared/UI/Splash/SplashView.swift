@@ -14,9 +14,11 @@ enum ViewState {
 
 struct SplashView: View {
     
+    // MARK: - Properties -
     @State private var isAnimating = false
     @State private var viewState: ViewState = .splash
     
+    // MARK: - Principal View -
     var body: some View {
         NavigationStack {
             switch viewState {
@@ -28,6 +30,7 @@ struct SplashView: View {
         }
     }
     
+    // MARK: - View Components -
     @ViewBuilder
     private var splashContent: some View {
         
@@ -41,7 +44,7 @@ struct SplashView: View {
     }
 }
 
-// MARK: - View Extensions
+// MARK: - View Extensions -
 extension SplashView {
     private func startAnimation() {
         withAnimation {

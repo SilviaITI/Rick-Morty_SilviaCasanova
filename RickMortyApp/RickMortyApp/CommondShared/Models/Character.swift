@@ -36,6 +36,7 @@ enum StatusState: String {
     case dead = "Dead"
     case unknown = "unknown"
     
+    /// Variable que asigna un icono en función del status del personaje
     var image: String {
         switch self {
         case .alive:
@@ -55,6 +56,7 @@ enum GenderState: String {
     case genderless = "Genderless"
     case unknown = "unknown"
     
+    /// Variable asigna un icono en función del género del personaje
     var image: String {
         switch self {
         case .female:
@@ -68,6 +70,9 @@ enum GenderState: String {
         }
     }
 }
+
+// MARK: - Extension -
+/// Character para test
 
 extension Character {
     static let charTest = Character(id: 1, name: "Rick Sanchez", status: "Alive", species: "Human", type: "Person who travel the world", gender: "Male", origin: originTest, location: locationTest, image: URL(string :"https://rickandmortyapi.com/api/character/avatar/1.jpeg"), episode: ["Episodeurltest"])

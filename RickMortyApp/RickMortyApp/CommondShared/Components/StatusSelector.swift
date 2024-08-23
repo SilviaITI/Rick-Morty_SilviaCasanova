@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct StatusSelector: View {
+    
+    // MARK: - Properties -
     @State var selectedOption: String = StatusState.alive.rawValue
     let action: () -> ()
+    
+    // MARK: - Principal View -
     var body: some View {
         HStack(spacing: 40){
             Button {

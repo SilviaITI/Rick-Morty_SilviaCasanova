@@ -8,13 +8,13 @@ import SwiftUI
 
 struct ShadowContainer: ViewModifier {
     
-    // MARK: - Properties
+    // MARK: - Properties -
     let radius: Double
     let backGroundColor: Color
     let shadowColor: Color
     let borderColor: Color
     
-    // MARK: - Init
+    // MARK: - Init -
     public init(radius: Double,
                 backGroundColor: Color,
                 shadowColor: Color,
@@ -25,7 +25,7 @@ struct ShadowContainer: ViewModifier {
         self.borderColor = borderColor
     }
     
-    // MARK: - Principal View
+    // MARK: - Principal View -
     public func body(content: Content) -> some View {
         ZStack {
             content
@@ -39,7 +39,7 @@ struct ShadowContainer: ViewModifier {
     }
 }
 
-// MARK: - View Modifier
+// MARK: - View Modifier -
 extension View {
     public func shadowContainer(radius: Double = 3,
                                 backGroundColor: Color = .white,
