@@ -10,31 +10,48 @@ import SwiftUI
 struct StatusSelector: View {
     
     // MARK: - Properties -
-    @State var selectedOption: String = StatusState.alive.rawValue
-    let action: () -> ()
+    @Binding var status: StatusState
     
     // MARK: - Principal View -
     var body: some View {
-        HStack(spacing: 40){
-            Button {
-                action()
-            } label: {
-                Image(.imgAlive)
+        VStack (spacing: 12) {
+            Text("Selecciona un status y pulsa la lupa")
+                .setStyle(font: .regular, size: 12)
+            
+            HStack(spacing: 30) {
+                ForEach(StatusState.allCases, id: \.self) { state in
+                    Button {
+                        status = state
+                    } label: {
+                        VStack {
+                            Image(state.image)
+                                .resizable()
+                                .scaledToFit()
+                                .padding()
+                                .frame(width: 60, height: 60)
+                                .background(status == state ? .blueMain.opacity(0.2) : Color.clear)
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(status == state ? .blueMain: Color.white, lineWidth: 2)
+                                )
+                            
+                            Text(state.rawValue)
+                                .setStyle(font: .regular, size: 12)
+                                .foregroundColor(status == state ? .blue : .gray)
+                        }
+                    }
+                    .disabled(status == state)
+                }
             }
-            Button {
-                action()
-            } label: {
-                Image(.imgDead)
-            }
-            Button {
-                action()
-            } label: {
-                Image(.imgUnknownStatus)
-            }
+            .padding()
+            .frame(height: 70)
+            
         }
     }
-    
 }
+
+
 #Preview {
-    StatusSelector( action: {})
+    StatusSelector(status: .constant(.alive))
 }

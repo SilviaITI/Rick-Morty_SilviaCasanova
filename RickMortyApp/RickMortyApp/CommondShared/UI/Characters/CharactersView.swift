@@ -10,59 +10,45 @@ import SwiftUI
 struct CharactersView: View {
     
     // MARK: - Properties -
-    @FocusState var isFocused
     @StateObject var viewModel = CharactersViewModel()
     @State var scrollToTop = false
     @State var showButton = false
     @State var isFiltered = false
     
+    
     // MARK: - Principal View -
     var body: some View {
-        ZStack {
-          
+        
+        LoaderView(isLoading: $viewModel.isLoading) {
+            
             VStack {
-                CustomSearchBar(searchText: $viewModel.searchText, focusedField: _isFocused) {
+                simpleAlertContent
+                CustomSearchBar(searchText: $viewModel.searchText, isSearchEnable: viewModel.enableSearchButton) {
                     viewModel.filterCharacters()
                 }
+                
+                StatusSelector(status: $viewModel.status)
                 if viewModel.isFiltered {
-                    Button {
-                        viewModel.clearFilters()
-                    } label: {
-                        Label(
-                            title: { Text("Limpiar filtros")
-                                
-                                    .setStyle(font: .regular, size: 16, color: .black)
-                                   
-                            },
-                            icon: { Image(systemName: "xmark.square.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundColor(.red.opacity(0.6))
-                                .frame(width: 40, height: 40)    
-                            }
-                        )
-                        .padding(6)
-                        .shadowContainer(borderColor: .red.opacity(0.6))
-                        
-                    }
+                    clearFilterButton
                 }
+                
                 ScrollViewReader { reader in
                     ScrollView {
-                            LazyVStack(spacing: 16
-                            ) {
-                                ForEach(viewModel.characterList.indices, id: \.self) { index in
-                                    NavigationLink {
-                                        DetailCharacter(data: viewModel.characterList[index])
-                                    } label: {
-                                        CharacterCell(viewModel.characterList[index])
-                                            .onAppear {
-                                                viewModel.handlePage(index: index)
-                                            }
-                                    }
+                        LazyVStack(spacing: 16
+                        ) {
+                            ForEach(viewModel.characterList.indices, id: \.self) { index in
+                                NavigationLink {
+                                    DetailCharacterView(data: viewModel.characterList[index])
+                                } label: {
+                                    CharacterCell(viewModel.characterList[index])
+                                        .onAppear {
+                                            viewModel.handlePage(index: index)
+                                        }
                                 }
                             }
-                            .padding(.horizontal)
                         }
+                        .padding(.horizontal)
+                    }
                     .onChange(of: scrollToTop) { _ in
                         withAnimation {
                             reader.scrollTo(0, anchor: .top)
@@ -71,29 +57,72 @@ struct CharactersView: View {
                     }
                 }
             }
-            Button {
-                    scrollToTop = true
-                
-            } label: {
-                
-               Image(systemName: "arrow.up")
-                    .resizable()
-                    .frame(width: 44, height: 44)
-                    .foregroundStyle(.greenSecondary)
-                    .padding(8)
-                    .background(Color.white)
-                    .clipShape(Circle())
-                   
-                    
-                
+            .animation(.default, value: viewModel.isFiltered)
+            .overlay(alignment: .bottomTrailing) {
+                scrollTopButton
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-            .padding(24)
-
+            
+            
         }
     }
+    
+    
+    // MARK: - View Components -
+    @ViewBuilder
+    var simpleAlertContent: some View {
+        ZStack {}
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text("Error al descargar los datos."),
+                    dismissButton: .default(Text("Aceptar"))
+                )
+            }
+    }
+    
+    @ViewBuilder
+    var clearFilterButton: some View {
+        Button {
+            viewModel.clearFilters()
+        } label: {
+            Label(
+                title: { Text("Limpiar filtros")
+                    
+                        .setStyle(font: .regular, size: 12, color: .black)
+                    
+                },
+                icon: { Image(systemName: "xmark.square.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.red.opacity(0.6))
+                        .frame(width: 24, height: 24)
+                }
+            )
+            .padding(4)
+            .shadowContainer(borderColor: .red.opacity(0.6))
+            .padding(8)
+            
+        }
+    }
+    
+    @ViewBuilder
+    var scrollTopButton: some View {
+        Button {
+            scrollToTop = true
+            
+        } label: {
+            
+            Image(systemName: "arrow.up")
+                .resizable()
+                .frame(width: 44, height: 44)
+                .foregroundStyle(.greenSecondary)
+                .padding(8)
+                .background(Color.white)
+                .clipShape(Circle())
+        }
+        .padding(24)
+    }
 }
-
 
 
 #Preview {

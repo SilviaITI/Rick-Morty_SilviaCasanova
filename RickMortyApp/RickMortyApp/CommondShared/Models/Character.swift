@@ -18,7 +18,7 @@ struct Character: Codable {
     let origin: Origin?
     let location: Location?
     let image: URL?
-    let episode: [String]?
+    let episode: [URL]?
     
     
     var statusImage: StatusState {
@@ -30,21 +30,25 @@ struct Character: Codable {
     }
 }
 
-enum StatusState: String {
-    
+enum StatusState: String, CaseIterable {
+    case none = ""
     case alive = "Alive"
     case dead = "Dead"
     case unknown = "unknown"
+  
     
     /// Variable que asigna un icono en función del status del personaje
     var image: String {
         switch self {
+        case .none:
+            return "img_none"
         case .alive:
             return "img_alive"
         case .dead:
             return "img_dead"
         case .unknown:
             return "img_unknown_status"
+      
         }
     }
 }
@@ -75,7 +79,7 @@ enum GenderState: String {
 /// Character para test
 
 extension Character {
-    static let charTest = Character(id: 1, name: "Rick Sanchez", status: "Alive", species: "Human", type: "Person who travel the world", gender: "Male", origin: originTest, location: locationTest, image: URL(string :"https://rickandmortyapi.com/api/character/avatar/1.jpeg"), episode: ["Episodeurltest"])
+    static let charTest = Character(id: 1, name: "Rick Sanchez", status: "Alive", species: "Human", type: "Person who travel the world", gender: "Male", origin: originTest, location: locationTest, image: URL(string :"https://rickandmortyapi.com/api/character/avatar/1.jpeg"), episode: nil)
     
     static let originTest = Origin(name: "Earth", url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9DGm9paGxvLOOcxjka6dWwZ-ViZ4aq8Hi_g&s")
     

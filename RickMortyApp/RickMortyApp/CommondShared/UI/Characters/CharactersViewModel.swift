@@ -17,25 +17,17 @@ final class CharactersViewModel: ObservableObject {
     @Published var isFiltered = false
     @Published var originalList: [Character] = []
     @Published var selectedOption: Int = 0
-    
-    
-//     var selectedStatus: String {
-//        switch selectedOption {
-//        case 0:
-//            return StatusState.alive.rawValue
-//        case 1:
-//            return StatusState.dead.rawValue
-//        case 2:
-//            return StatusState.unknown.rawValue
-//        default:
-//            return StatusState.unknown.rawValue
-//        }
-//    }
+    @Published var status: StatusState = .none
+    @Published var isLoading = false
+    @Published var showAlert = false
     
     var isPaginable = true
-    var listError = false
     var currentPage = 0
     var currentFilteredPage = 0
+    var enableSearchButton: Bool {
+        !searchText.isEmpty || status != .none
+    }
+  
     
     // MARK: - Init -
     /// Contiene el método que se ejecutará cuando aparezca la vista
@@ -52,7 +44,7 @@ final class CharactersViewModel: ObservableObject {
     func handlePage(index: Int) {
         if index == characterList.count - 3 {
             Task { [weak self] in
-                if  !isFiltered {
+                if  !(self?.isFiltered ?? false) {
                     await self?.fetchCharacters()
                 } else {
                     await self?.fetchCharactersFiltered()
@@ -74,6 +66,7 @@ final class CharactersViewModel: ObservableObject {
         filteredList.removeAll(keepingCapacity: true)
         searchText = ""
         isFiltered = false
+        status = .none
     }
     
     // MARK: - API Methods -
@@ -81,6 +74,7 @@ final class CharactersViewModel: ObservableObject {
     @MainActor
     func fetchCharacters() async {
         guard isPaginable  else { return }
+        isLoading = true
         do {
             let response = try await CharactersServices.fetchCharacters(page: currentPage)
             isPaginable = response.info?.next != nil
@@ -88,26 +82,30 @@ final class CharactersViewModel: ObservableObject {
             originalList = characterList
             currentPage += 1
             isFiltered = false
+            
         } catch {
-            listError = true
+            showAlert = true
         }
+        isLoading = false
     }
     
  
     /// Método para traer el listado de los personajes filtrado opcionalmente por nombre y estado y comprueba si existe una página siguiente para mostrarla.
     @MainActor
     func fetchCharactersFiltered() async {
+        isLoading = true
         do {
             let response = try await CharactersServices.fetchCharactersByName(
                 page: currentFilteredPage,
                 name: searchText,
-                status: "")
+                status: status.rawValue)
             filteredList.append(contentsOf: response.results ?? [])
             characterList = filteredList
             currentFilteredPage += 1
             isFiltered = true
         } catch {
-            listError = true
+            showAlert = true
         }
+        isLoading = false
     }
 }

@@ -19,6 +19,7 @@ enum HTTPMethod: String {
 enum NetworkInterface {
     case getAllCharacters(page: Int)
     case getCharactersFiltered(page: Int?, name: String?, status: String?)
+    case getEpisodeById(id: Int)
 }
 
 extension NetworkInterface {
@@ -27,13 +28,16 @@ extension NetworkInterface {
         case .getAllCharacters,
                 .getCharactersFiltered:
             return "/api/character"
+        case .getEpisodeById(let id):
+            return "/api/episode/\(id)"
         }
     }
     
     var method: HTTPMethod {
         switch self {
         case .getAllCharacters,
-                .getCharactersFiltered:
+                .getCharactersFiltered,
+                .getEpisodeById:
             return .get
         }
     }
@@ -54,6 +58,8 @@ extension NetworkInterface {
                 params["status"] = status
             }
             return queryItem(params)
+            
+        default: return nil
         }
     }
     

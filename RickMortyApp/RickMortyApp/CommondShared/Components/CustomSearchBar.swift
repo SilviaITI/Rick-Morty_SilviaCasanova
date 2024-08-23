@@ -12,16 +12,16 @@ struct CustomSearchBar: View {
     // MARK: - Properties -
     @Binding var searchText: String
     @FocusState var focusedField: Bool
+    let isSearchEnable: Bool
     let action: () -> ()
     
     // MARK: - Principal View -
     var body: some View {
-      
-        HStack {
-            TextField("Nombre del personaje...", text: $searchText)
-                .textFieldStyle(CustomRounderedTextFieldStyle())
-                .focused($focusedField)
-       
+            HStack {
+                TextField("Nombre del personaje...", text: $searchText)
+                    .textFieldStyle(CustomRounderedTextFieldStyle())
+                    .focused($focusedField)
+                
                 Button {
                     action()
                 } label: {
@@ -29,16 +29,17 @@ struct CustomSearchBar: View {
                         .resizable()
                         .scaledToFit()
                         .foregroundColor(.greenSecondary)
+                        .opacity(isSearchEnable ? 1 : 0.6 )
                         .frame(width: 40, height: 40)
                 }
-
+                .disabled(!isSearchEnable)
+                
+            }
+            .padding()
+            .background(Color.blueMain)
         }
-    .padding()
-    .background(Color.blueMain)
-        }
-    }
-
+}
 
 #Preview {
-    CustomSearchBar(searchText: .constant(""), action: {})
+    CustomSearchBar(searchText: .constant(""), isSearchEnable: true, action: {})
 }
