@@ -11,10 +11,6 @@ struct CharactersView: View {
     
     // MARK: - Properties -
     @StateObject var viewModel = CharactersViewModel()
-    @State var scrollToTop = false
-    @State var showButton = false
-    @State var isFiltered = false
-    
     
     // MARK: - Principal View -
     var body: some View {
@@ -23,75 +19,80 @@ struct CharactersView: View {
             
             VStack {
                 simpleAlertContent
-                CustomSearchBar(searchText: $viewModel.searchText, isSearchEnable: viewModel.enableSearchButton) {
+                
+                CustomSearchBar(searchText: $viewModel.searchText,
+                                isSearchEnable: viewModel.enableSearchButton) {
                     viewModel.filterCharacters()
                 }
                 
                 StatusSelector(status: $viewModel.status)
+                
                 if viewModel.isFiltered {
                     clearFilterButton
                 }
                 
-                ScrollViewReader { reader in
-                    ScrollView {
-                        LazyVStack(spacing: 16
-                        ) {
-                            ForEach(viewModel.characterList.indices, id: \.self) { index in
-                                NavigationLink {
-                                    DetailCharacterView(data: viewModel.characterList[index])
-                                } label: {
-                                    CharacterCell(viewModel.characterList[index])
-                                        .onAppear {
-                                            viewModel.handlePage(index: index)
-                                        }
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    .onChange(of: scrollToTop) { _ in
-                        withAnimation {
-                            reader.scrollTo(0, anchor: .top)
-                            scrollToTop = false
-                        }
-                    }
-                }
+                listSection
             }
             .animation(.default, value: viewModel.isFiltered)
             .overlay(alignment: .bottomTrailing) {
                 scrollTopButton
             }
-            
-            
         }
     }
     
     
     // MARK: - View Components -
     @ViewBuilder
-    var simpleAlertContent: some View {
+    private var listSection: some View {
+        ScrollViewReader { reader in
+            ScrollView {
+                LazyVStack(spacing: 16
+                ) {
+                    ForEach(viewModel.characterList.indices, id: \.self) { index in
+                        NavigationLink {
+                            DetailCharacterView(data: viewModel.characterList[index])
+                        } label: {
+                            CharacterCell(viewModel.characterList[index])
+                                .onAppear {
+                                    viewModel.handlePage(index: index)
+                                }
+                        }
+                    }
+                }
+                .padding(.horizontal)
+            }
+            .onChange(of: viewModel.scrollToTop) { _ in
+                withAnimation {
+                    reader.scrollTo(0, anchor: .top)
+                    viewModel.scrollToTop = false
+                }
+            }
+        }
+    }
+    @ViewBuilder
+    private var simpleAlertContent: some View {
         ZStack {}
             .alert(isPresented: $viewModel.showAlert) {
                 Alert(
-                    title: Text("Error"),
-                    message: Text("Error al descargar los datos."),
-                    dismissButton: .default(Text("Aceptar"))
+                    title: Text( "error".localized),
+                    message: Text(viewModel.alertText),
+                    dismissButton: .default(Text("aceptar".localized))
                 )
             }
     }
     
     @ViewBuilder
-    var clearFilterButton: some View {
+    private var clearFilterButton: some View {
         Button {
             viewModel.clearFilters()
         } label: {
             Label(
-                title: { Text("Limpiar filtros")
-                    
+                title: {
+                    Text("home_clear_filters".localized)
                         .setStyle(font: .regular, size: 12, color: .black)
-                    
                 },
-                icon: { Image(systemName: "xmark.square.fill")
+                icon: {
+                    Image(systemName: "xmark.square.fill")
                         .resizable()
                         .scaledToFit()
                         .foregroundColor(.red.opacity(0.6))
@@ -101,17 +102,14 @@ struct CharactersView: View {
             .padding(4)
             .shadowContainer(borderColor: .red.opacity(0.6))
             .padding(8)
-            
         }
     }
     
     @ViewBuilder
-    var scrollTopButton: some View {
+    private var scrollTopButton: some View {
         Button {
-            scrollToTop = true
-            
+            viewModel.scrollToTop = true
         } label: {
-            
             Image(systemName: "arrow.up")
                 .resizable()
                 .frame(width: 44, height: 44)

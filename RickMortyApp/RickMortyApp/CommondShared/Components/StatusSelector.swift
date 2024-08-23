@@ -15,7 +15,7 @@ struct StatusSelector: View {
     // MARK: - Principal View -
     var body: some View {
         VStack (spacing: 12) {
-            Text("Selecciona un status y pulsa la lupa")
+            Text("status.select_status".localized)
                 .setStyle(font: .regular, size: 12)
             
             HStack(spacing: 30) {

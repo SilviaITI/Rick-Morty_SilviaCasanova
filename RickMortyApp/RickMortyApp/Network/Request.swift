@@ -9,7 +9,9 @@ import Foundation
 
 extension URLRequest {
     static func request(networkRequest: NetworkInterface) -> URLRequest {
-        var components = URLComponents(string: "https://rickandmortyapi.com")
+        let baseUrl = Bundle.main.infoDictionary?["baseUrl"] as? String
+        
+        var components = URLComponents(string: baseUrl ?? "")
         components?.path = networkRequest.path
         
         if let query = networkRequest.query {

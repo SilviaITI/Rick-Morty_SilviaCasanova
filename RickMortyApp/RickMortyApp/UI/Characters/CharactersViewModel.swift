@@ -7,25 +7,27 @@
 
 import Foundation
 
-
+@MainActor
 final class CharactersViewModel: ObservableObject {
     
     // MARK: - Properties -
     @Published var filteredList: [Character] = []
     @Published var characterList: [Character] = []
     @Published var searchText = ""
+    @Published var alertText = ""
     @Published var isFiltered = false
     @Published var originalList: [Character] = []
     @Published var selectedOption: Int = 0
     @Published var status: StatusState = .none
     @Published var isLoading = false
     @Published var showAlert = false
+    @Published var scrollToTop = false
     
     var isPaginable = true
     var currentPage = 0
     var currentFilteredPage = 0
     var enableSearchButton: Bool {
-        !searchText.isEmpty || status != .none
+        !searchText.isEmpty || status != .none 
     }
   
     
@@ -56,6 +58,8 @@ final class CharactersViewModel: ObservableObject {
     /// Método para filtrar el listado original
     func filterCharacters() {
         Task { [weak self] in
+            self?.filteredList.removeAll(keepingCapacity: true)
+            self?.scrollToTop = true
             await self?.fetchCharactersFiltered()
         }
     }
@@ -67,11 +71,11 @@ final class CharactersViewModel: ObservableObject {
         searchText = ""
         isFiltered = false
         status = .none
+        scrollToTop = true
     }
     
     // MARK: - API Methods -
     /// Método para traer el listado de todos los personajes y comprueba si existe una página siguiente para mostrarla
-    @MainActor
     func fetchCharacters() async {
         guard isPaginable  else { return }
         isLoading = true
@@ -83,15 +87,17 @@ final class CharactersViewModel: ObservableObject {
             currentPage += 1
             isFiltered = false
             
-        } catch {
-            showAlert = true
+        } catch(let error) {
+            if let apiError = error as? APIErrors {
+                alertText = apiError.description
+                showAlert = true
+            }
         }
         isLoading = false
     }
     
  
     /// Método para traer el listado de los personajes filtrado opcionalmente por nombre y estado y comprueba si existe una página siguiente para mostrarla.
-    @MainActor
     func fetchCharactersFiltered() async {
         isLoading = true
         do {
@@ -103,8 +109,12 @@ final class CharactersViewModel: ObservableObject {
             characterList = filteredList
             currentFilteredPage += 1
             isFiltered = true
-        } catch {
-            showAlert = true
+            
+        } catch(let error) {
+            if let apiError = error as? APIErrors {
+                alertText = apiError.description
+                showAlert = true
+            }
         }
         isLoading = false
     }

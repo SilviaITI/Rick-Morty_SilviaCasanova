@@ -19,17 +19,17 @@ enum APIErrors: Error {
     var description: String {
         switch self {
         case .general:
-            return "\("ERROR_GENERAL".localized) \("ERROR_MESSAGE_DEFAULT".localized)"
+            return "\("error_general".localized) \("error_message_default".localized)"
         case .json:
-            return "\("ERROR_JSON".localized) \("ERROR_MESSAGE_DEFAULT".localized)"
+            return "\("error_json".localized) \("error_message_default".localized)"
         case .nonHTTP:
-            return "\("ERROR_HTTP".localized) \("ERROR_MESSAGE_DEFAULT".localized)"
+            return "\("error_http".localized) \("error_message_default".localized)"
         case .status(let int):
-            return "\("ERROR_STATUS".localized) \(int)"
+            return "\("error_status".localized) \(int)"
         case .invalidData:
-            return "ERROR_INVALID_DATA".localized
+            return "error_invalid_data".localized
         case .noData:
-            return "\("ERROR_NO_DATA".localized)"
+            return "\("error_no_data".localized)"
         case .defaultError(let message):
             return message
         }

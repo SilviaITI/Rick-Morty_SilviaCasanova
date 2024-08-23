@@ -9,9 +9,9 @@ import Foundation
 
 extension URL {
     
-    //Método para obtener el id del primer episodio de un personaje a partir del path
-  var getLastPath : Int? {
+    // Método para obtener la última parte del path de una url
+  var getLastPath: String? {
         let lastPathComponent = self.lastPathComponent
-        return Int(lastPathComponent)
+        return lastPathComponent
     }
 }

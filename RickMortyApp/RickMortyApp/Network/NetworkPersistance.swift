@@ -10,7 +10,7 @@ import Foundation
 extension NetworkInterface {
     /// Método para obtener un JSON lanzando una petición asíncrona y controlando los errores
     func response<T: Codable>() async throws -> T {
-        var request = URLRequest.request(networkRequest: self)
+        let request = URLRequest.request(networkRequest: self)
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse else { throw APIErrors.nonHTTP }

@@ -17,27 +17,27 @@ struct CustomSearchBar: View {
     
     // MARK: - Principal View -
     var body: some View {
-            HStack {
-                TextField("Nombre del personaje...", text: $searchText)
-                    .textFieldStyle(CustomRounderedTextFieldStyle())
-                    .focused($focusedField)
-                
-                Button {
-                    action()
-                } label: {
-                    Image(systemName: "magnifyingglass.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(.greenSecondary)
-                        .opacity(isSearchEnable ? 1 : 0.6 )
-                        .frame(width: 40, height: 40)
-                }
-                .disabled(!isSearchEnable)
-                
+        HStack {
+            TextField("search.character_textfield".localized, text: $searchText)
+                .textFieldStyle(CustomRounderedTextFieldStyle())
+                .focused($focusedField)
+            
+            Button {
+                action()
+            } label: {
+                Image(systemName: "magnifyingglass.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.greenSecondary)
+                    .opacity(isSearchEnable ? 1 : 0.6 )
+                    .frame(width: 40, height: 40)
             }
-            .padding()
-            .background(Color.blueMain)
+            .disabled(!isSearchEnable)
+            
         }
+        .padding()
+        .background(Color.blueMain)
+    }
 }
 
 #Preview {
